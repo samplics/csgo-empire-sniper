@@ -1,9 +1,6 @@
 # csgo-empire-sniper
-maybe working script to snipe items off csgo empire
+Don't ask me for support on this, I don't update it anymore and not sure if it works.
 
-snipes items off csgo empire if certain percent lower than price source
+Config.js should have comments that explain everything, I use statsanytime.com (their api is free), for pricing.
 
-can select from steam, skincay, bitskins, and cs.money to compare prices
-uses pixels amazing statsanytime.com api
-
-super customizable config
+I divided each of the requests into different files in the components folder, and the script.js is what you need to run.
