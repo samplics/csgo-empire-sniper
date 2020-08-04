@@ -1,25 +1,29 @@
+const axios = require('axios');
 const fetch = require('node-fetch');
+const qs = require('querystring');
 const config = require('../config.js');
 const request = require('request');
 const SetTradeLink = require('./setTradeLink.js');
 const SetPin = require('./setPin.js');
+const FormData = require('form-data');
 
-module.exports = async function(loginHeaders, item){
-
-  var token = await SetPin(loginHeaders);
-  var itemPost = {"item_ids":["iqe86j"],"bot_id":6208243,"security_token":token}
-
-  axios.post('https://csgoempire.com/api/v2/trade/withdraw', qs.stringify({"item_ids":["iqe86j"],"bot_id":6208243,"security_token":"x78m2VI4ceuTcAfc2xuOYDGTBCDZJbK2KMAa+ksiV/+B"}), {headers: loginHeaders})
-  .then((res) => {
-     console.log(res)
-   });
-  fetch('https://csgoempire.com/api/v2/trade/withdraw', {
-    method: 'post',
-    headers: loginHeaders,
-    body: JSON.stringify(itemPost)
-  })
-  .then(res => res.json())
-  .then((data) => {
-    console.log(data)
-  })
+module.exports = function(loginHeaders, item){
+  var withdrawData;
+  return new Promise(function(resolve, reject) {
+    SetPin(loginHeaders)
+    .then((securityToken)=>{
+      const withdrawObject = {item_ids:[item.id], bot_id:item.bot_id, security_token: securityToken}
+      axios.post('https://csgoempire.com/api/v2/trade/withdraw', withdrawObject, {headers: loginHeaders})
+      .then((res) => {
+        if(data.success == true){
+          console.log(`Successfully started a withdraw request for ${item.market_name} | Created at: ${res.data.data.created_at}`)
+          withdrawData = res.data.data;
+          resolve(withdrawData)
+        }
+       })
+       .catch(err => {
+         console.log(err.response.data);
+       })
+    })
+  });
 }

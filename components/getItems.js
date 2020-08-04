@@ -7,8 +7,6 @@ mongoose.connect('mongodb://127.0.0.1/CSGOEmpire', {
   useUnifiedTopology: true
 }); */
 
-const Empire = require("./../models/empireItems.js");
-
 var oldItems = null;
 var newItems = null;
 
@@ -23,7 +21,7 @@ return new Promise(function(resolve, reject) {
         oldItems = res.data;
         oldItems = oldItems.filter(function(body){
           body.usd_price = Number(((body.market_value / 100) / config.settings.empireCoinValue).toFixed(2));
-          return !config.withdraw.blackListedItems.some(r => body.market_name.includes(r)) && body.tradable == true && body.tradelock == false && body.bundle_id == null && body.market_value < coins && body.market_value < highestPrice && body.market_value > lowestPrice;
+          return !config.withdraw.blackListedItems.some(r => body.market_name.includes(r)) && body.appid == 730 && body.tradable == true && body.tradelock == false && body.bundle_id == null && body.market_value < coins && body.market_value < highestPrice && body.market_value > lowestPrice;
         })
         resolve(oldItems);
       } else{
@@ -31,7 +29,7 @@ return new Promise(function(resolve, reject) {
         let stringOld = JSON.stringify(oldItems);
         newItems = newItems.filter(function(body){
           body.usd_price = Number(((body.market_value / 100) / config.settings.empireCoinValue).toFixed(2));
-          return !stringOld.includes(body.assetid) && !config.withdraw.blackListedItems.some(r => body.market_name.includes(r)) && body.tradable == true && body.tradelock == false && body.bundle_id == null && body.market_value < coins && body.market_value < highestPrice && body.market_value > lowestPrice;
+          return !stringOld.includes(body.assetid) && !config.withdraw.blackListedItems.some(r => body.market_name.includes(r)) && body.appid == 730 && body.tradable == true && body.tradelock == false && body.bundle_id == null && body.market_value < coins && body.market_value < highestPrice && body.market_value > lowestPrice;
         })
         resolve(newItems);
         newItems.forEach((item)=>{
@@ -77,5 +75,4 @@ const getLocked = function(loginHeaders, coins){
   });
 }
 
-exports.getLocked = getLocked;
-exports.getP2P = getP2P;
+module.exports = { getLocked: getLocked, getP2P: getP2P }
